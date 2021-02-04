@@ -8,7 +8,8 @@ class Snake
     down: { x: 0, y: +20, opposite: :up },
     up: { x: 0, y: -20, opposite: :down },
     right: { x: +20, y: 0, opposite: :left },
-    left: { x: -20, y: 0, opposite: :right }
+    left: { x: -20, y: 0, opposite: :right },
+    stop: { x: 0, y: 0, opposite: :none }
   }
   def initialize(game)
     @x = @y = 0.0
@@ -17,6 +18,7 @@ class Snake
     @size = SIZE
     @speed = 0.6
     @eat_sound = Gosu::Sample.new('lib/eat.wav')
+    @dead_sound = Gosu::Sample.new('lib/start.wav')
     @body = [{ x: @x, y: @y }]
   end
 
@@ -36,7 +38,12 @@ class Snake
   def dead?
     cond_a = @x > 400 || @y > 400
     cond_b = @x.negative? || @y.negative?
-    @size = 0 if cond_a || cond_b
+    if cond_a || cond_b
+      @y = 0
+      @x = 0
+      @size = 0
+      @dead_sound.play
+    end
   end
 
   def move

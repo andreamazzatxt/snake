@@ -14,7 +14,6 @@ class Game < Gosu::Window
     @font = Gosu::Font.new(self, Gosu.default_font_name, 20)
     @dead_object = { over: "", continue: "" }
     @points = 0
-    @start_sound = Gosu::Sample.new('lib/start.wav')
     reset
   end
 
@@ -54,6 +53,7 @@ class Game < Gosu::Window
 
   def check_dead
     if @snake.dead?
+      @snake.change_direction(:stop)
       @dead_object[:over] = "GAME OVER"
       @dead_object[:continue] = "(press [enter] to play again)"
       @food.disappear
@@ -65,7 +65,6 @@ class Game < Gosu::Window
     @food = Food.new(self, @snake)
     @points = 0
     @dead_object = { over: "", continue: "" }
-    @start_sound.play
   end
 end
 
